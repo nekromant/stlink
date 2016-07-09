@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 2.8.7)
 SET(PROJECT_VERSION 1.2.1)
 SET(PROJECT_API_VERSION 1)
+SET(PROJECT_DESCRIPTION "Open source version of the STMicroelectronics Stlink Tools")
 
 project(stlink C)
 include(CheckCCompilerFlag)
@@ -188,6 +189,29 @@ INSTALL(FILES ${CMAKE_SOURCE_DIR}/include/stlink.h
 
 INSTALL(FILES ${STLINK_HEADERS}
 	DESTINATION include/${CMAKE_LIBRARY_PATH}/stlink-${PROJECT_VERSION}/stlink)
+
+#Finally, the pkg-config file
+SET(PKG_CONFIG_LIBDIR
+    "\${prefix}/lib/\${deb_host_multiarch}"
+)
+SET(PKG_CONFIG_INCLUDEDIR
+    "\${prefix}/include/\${deb_host_multiarch}/stlink-${PROJECT_VERSION}"
+)
+SET(PKG_CONFIG_LIBS
+    "-L\${libdir} -l:libstlink.so.${PROJECT_VERSION}"
+)
+SET(PKG_CONFIG_CFLAGS
+    "-I\${includedir}"
+)
+
+CONFIGURE_FILE(
+  "${CMAKE_CURRENT_SOURCE_DIR}/pkg-config.pc.cmake"
+  "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}.pc"
+)
+
+INSTALL(FILES "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}.pc"
+       DESTINATION lib/${CMAKE_LIBRARY_PATH}/pkgconfig/)
+
 
 if(NOT MINGW)
   list(APPEND STLINK_SOURCE src/tools/term.c)
