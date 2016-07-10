@@ -25,4 +25,10 @@ Package: stlink-tools
 Section: libdevel
 Architecture: any
 Depends: libstlink (= ${binary:Version}), ${misc:Depends}
-Description: OpenSource ST-Link tools replacement. Utilities.
+Description: OpenSource ST-Link tools replacement. Commandline Utilities.
+
+Package: stlink-gui
+Section: libdevel
+Architecture: any
+Depends: libstlink (= ${binary:Version}), ${misc:Depends}
+Description: OpenSource ST-Link tools replacement. GUI Tool.
