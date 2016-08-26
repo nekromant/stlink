@@ -1,23 +1,28 @@
-CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
+# Warning: This example assumes that you are building on a host
+# with pkg-config available (e.g. linux). The logic required to
+# build under windows/mingw and/or mac was intentionally omitted
+# to keep this CMakeLists as small as possible
 
-PROJECT(st-hello)
-SET(PROJECT_VERSION   0.1)
-SET(SRCS main.c)
+cmake_minimum_required(VERSION 2.8)
 
-FIND_PACKAGE(PkgConfig)
-PKG_CHECK_MODULES(STLINK REQUIRED stlink)
+project(st-hello)
+set(PROJECT_VERSION   0.1)
+set(SRCS main.c)
 
-SET(CMAKE_C_FLAGS " ${STLINK_CFLAGS_OTHER} -Wall -Werror")
+find_package(PkgConfig)
+pkg_check_modules(STLINK REQUIRED stlink)
 
-INCLUDE_DIRECTORIES(
+set(CMAKE_C_FLAGS " ${STLINK_CFLAGS_OTHER} -Wall -Werror")
+
+include_directories(
     ${STLINK_INCLUDE_DIRS}
 )
 
-ADD_EXECUTABLE(${PROJECT_NAME} ${SRCS})
+add_executable(${PROJECT_NAME} ${SRCS})
 
-TARGET_LINK_LIBRARIES(${PROJECT_NAME}
+target_link_libraries(${PROJECT_NAME}
     ${STLINK_LIBRARIES}
 )
 
-INSTALL(TARGETS ${PROJECT_NAME}
+install(TARGETS ${PROJECT_NAME}
         DESTINATION bin)
